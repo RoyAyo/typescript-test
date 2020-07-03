@@ -1,14 +1,15 @@
-import { Router, Response, Request } from "express";
+import { Router } from "express";
 
-const route = Router();
+import { userRegister,allUsers } from '../../controller/userController';
 
-route.post('/register',(req: Request, res: Response) => {
-    //register with name,email, 
-});
+const router = Router();
 
-route.post('/register', (req: Request, res: Response) => {
+router.post('/register',userRegister);
 
-});
+router.get('/',allUsers);
 
+// router.post('/login', (req: Request, res: Response) => {
 
-export default route;
+// });
+
+module.exports = router;
