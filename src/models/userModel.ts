@@ -1,10 +1,10 @@
-import { Schema,model,Types,Document } from 'mongoose';
+import { Schema,model,Types,Document,Model } from 'mongoose';
 import validator from 'validator';
 import * as jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
 config();
 
-interface Iuser extends Document{ 
+interface IuserSchema extends Document{ 
     _id : Types.ObjectId,
     name : string,
     email:string,
@@ -16,6 +16,15 @@ interface Iuser extends Document{
     createdAt: string,
     updatedAt: string
 }
+
+interface IuserBase extends IuserSchema{
+    generateAuthToken(): Promise<string>
+}
+
+interface IuserModel extends Model<IuserBase>{
+    verifyToken(token: string): Promise<string>
+}
+
 
 const userSchema:Schema = new Schema({
     'name' : {
@@ -54,14 +63,12 @@ const userSchema:Schema = new Schema({
     'tokens':[
         {
             'access' : {
-                type: String,
-                required:true
+                type: String
             }
         },
         {
             'token' : {
-                type:String,
-                required:true
+                type:String
             }
         }
     ],
@@ -75,18 +82,44 @@ const userSchema:Schema = new Schema({
     }
 });
 
-userSchema.methods.generateAuthToken = async function(body : Iuser) {
+userSchema.methods.generateAuthToken = async function() {
     var user = this;
 
-    const _id:Types.ObjectId = body._id;
+    const _id:Types.ObjectId = user._id;
 
     const salt: string = process.env.salt || "Helloworld";
     const token:string = await jwt.sign({_id : _id.toHexString()},salt).toString();
-    
-    user.tokens.concat({ access:"auth",token });
+    const access:string = "auth";
 
+    user.tokens = await user.tokens.concat([{ token}]);
+    //user.tokens.push({access,token});
+    return user.save().then(() => {
+        return token;
+    });
 }
 
-const User = model<Iuser>('user',userSchema);
+userSchema.statics.verifyToken = async function(token : string){
+    var User = this;
+    const access : string = "auth";
+    const salt: string = process.env.salt || "Helloworld";
+    try{
+        const decoded: any = await jwt.verify(token, salt);
+    
+        return User.findOne(
+            {
+                'tokens.token': token,
+                '_id': decoded._id,
+                'tokens.access' : access
+            }
+
+        );
+    
+    }catch(e){
+        return Promise.reject();
+    }
+}
+
+
+const User = model<IuserBase,IuserModel>('user',userSchema);
 
 export default User;
