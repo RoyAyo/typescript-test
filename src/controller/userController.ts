@@ -28,25 +28,37 @@ export const userRegister = (req: Request, res: Response): void => {
     }
 };
 
+export const userLogin = (req: Request, res: Response): void => {
+    //register with Full_name,username,email(verified)
+    try {
+        const body = _.pick(req.body, ["username","password"]);
+
+        User.findOne({
+            username : body.username,
+            password : body.password
+        }).then((user : any) => {
+            if(user){
+                return user.generateAuthToken();
+            }
+            res.status(400).send('Invalid credentials');
+        }).then((token: string) => {
+            res.header('x-auth',token).send('done');
+        }).catch((err:any) => {
+            console.log(err.message);
+        });
+    } catch (err) {
+        res.status(400).send(err);
+    }
+};
+
 //tobe moved to middleware
-export const userAuth = (req : Request, res: Response,next : NextFunction) => {
-    const token : any = req.header('x-auth');
-
-    User.verifyToken(token).then((user : any) => {
-        if(!user){
-            res.status(401).send('Please login');
-        }
-        res.send(user);
-    })
-    .catch((err : any) => {
-        console.log(err);
-    });
-
-
-}
 
 export const allUsers = async (req:Request, res: Response)=> {
     const users = await User.find();
 
     res.send(users);
 };
+
+export const userProfile = async (req: Request, res:Response) => {
+    
+}

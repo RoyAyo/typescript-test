@@ -60,15 +60,16 @@ const userSchema:Schema = new Schema({
         default:false,
         type: Number
     },
-    'tokens':[
+    'tokens':[ 
         {
+            '_id': false,
             'access' : {
-                type: String
-            }
-        },
-        {
+                type: String,
+                required:true
+            },
             'token' : {
-                type:String
+                type:String,
+                required:true
             }
         }
     ],
@@ -91,8 +92,8 @@ userSchema.methods.generateAuthToken = async function() {
     const token:string = await jwt.sign({_id : _id.toHexString()},salt).toString();
     const access:string = "auth";
 
-    user.tokens = await user.tokens.concat([{ token}]);
-    //user.tokens.push({access,token});
+    user.tokens.push({access,token});
+    
     return user.save().then(() => {
         return token;
     });
@@ -115,7 +116,7 @@ userSchema.statics.verifyToken = async function(token : string){
         );
     
     }catch(e){
-        return Promise.reject();
+        return Promise.reject(e);
     }
 }
 
