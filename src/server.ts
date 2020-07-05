@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:false}));
 
 //routes
-app.use('/api/v1',require('./routes/apis/user'));
+app.use('/api/v1',require('./routes/apis/app'));
 
 app.get('/', (req: Request,res:Response) => {
     res.send('Hello community');

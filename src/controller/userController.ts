@@ -2,7 +2,7 @@ import {Request, Response} from 'express';
 import * as _ from "lodash";
 
 import User from '../models/userModel';
-import { NextFunction } from 'connect';
+
 
 export const userRegister = (req: Request, res: Response): void => {
     //register with Full_name,username,email(verified)
@@ -50,8 +50,6 @@ export const userLogin = (req: Request, res: Response): void => {
         res.status(400).send(err);
     }
 };
-
-//tobe moved to middleware
 
 export const allUsers = async (req:Request, res: Response)=> {
     const users = await User.find();

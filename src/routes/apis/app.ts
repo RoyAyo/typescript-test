@@ -12,10 +12,8 @@ router.post('/login',userLogin);
 
 router.get('/all', allUsers);
 
-router.get('/profile/:username',userAuth,userProfile);
+router.get('/profile/:username', [userAuth], userProfile);
 
-// router.post('/login', (req: Request, res: Response) => {
-
-// });
+router.post('/sendMessage',[userAuth]);
 
 module.exports = router;
