@@ -4,22 +4,22 @@ import User from '../models/userModel';
 
 const userAuth = (req : Request, res: Response,next : NextFunction) => {
     try{
-        const token: any = req.header('x-auth');
+        const token : any = req.header('x-auth');
 
         if(token){
-
             User.verifyToken(token).then((user: any) => {
-                if (user) {
-                    next();
-                }
+                req.body.user = user;
+                next();
             })
             .catch((err: any) => {
                 res.status(400).send(err.message);
             });
+        }else{
+            res.sendStatus(401);
         }
     }
     catch(e){
-        res.status(404).send('Error');
+        res.sendStatus(500);
     }
 }
 

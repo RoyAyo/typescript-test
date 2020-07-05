@@ -14,6 +14,5 @@ router.get('/all', allUsers);
 
 router.get('/profile/:username', [userAuth], userProfile);
 
-router.post('/sendMessage',[userAuth]);
 
 module.exports = router;

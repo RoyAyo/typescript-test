@@ -40,14 +40,14 @@ export const userLogin = (req: Request, res: Response): void => {
             if(user){
                 return user.generateAuthToken();
             }
-            res.status(400).send('Invalid credentials');
+            res.send(400);
         }).then((token: string) => {
             res.header('x-auth',token).send('done');
         }).catch((err:any) => {
             console.log(err.message);
         });
     } catch (err) {
-        res.status(400).send(err);
+        res.send(500);
     }
 };
 
@@ -58,5 +58,7 @@ export const allUsers = async (req:Request, res: Response)=> {
 };
 
 export const userProfile = async (req: Request, res:Response) => {
-    
+    const user = req.body.user;
+
+    res.send(user);
 }
