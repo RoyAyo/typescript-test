@@ -7,7 +7,7 @@
     "start": "node ./dist/server.js",
     "build": "tsc -p .",
     "dev": "ts-node ./src/server.ts",
-    "dev-watch": "nodemon --exec 'npm run dev'",
+    "dev-watch": "nodemon --exec npm run dev",
     "test": "mocha ./src/test/**/*.test.js",
     "tsc": "tsc"
   },

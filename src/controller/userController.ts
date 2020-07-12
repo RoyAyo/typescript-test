@@ -3,6 +3,8 @@ import * as _ from "lodash";
 
 import User from '../models/userModel';
 
+import IuserSchema from '../interfaces/user';
+
 
 export const userRegister = (req: Request, res: Response): void => {
     //register with Full_name,username,email(verified)
@@ -58,7 +60,9 @@ export const allUsers = async (req:Request, res: Response)=> {
 };
 
 export const userProfile = async (req: Request, res:Response) => {
-    const user = req.body.user;
+    const user : IuserSchema = req.body.user;
 
-    res.send(user);
+    const user_props = _.pick(user,["name","email","username",""]);
+
+    res.send(user_props);
 }

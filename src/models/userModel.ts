@@ -4,18 +4,7 @@ import * as jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
 config();
 
-interface IuserSchema extends Document{ 
-    _id : Types.ObjectId,
-    name : string,
-    email:string,
-    username:string,
-    password : string,
-    isVerifed: boolean,
-    isAdmin:boolean,
-    tokens : Array<string>,
-    createdAt: string,
-    updatedAt: string
-}
+import IuserSchema from '../interfaces/user';
 
 interface IuserBase extends IuserSchema{
     generateAuthToken(): Promise<string>

@@ -2,7 +2,6 @@ import express,{ Application, Request, Response, NextFunction} from "express";
 import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import SocketIO from 'socket.io';
-import * as http from 'http';
 dotenv.config();
 
 //my imported modules
