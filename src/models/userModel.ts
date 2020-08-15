@@ -1,4 +1,4 @@
-import { Schema,model,Types,Document,Model } from 'mongoose';
+import { Schema,model,Types,Model } from 'mongoose';
 import validator from 'validator';
 import * as jwt from 'jsonwebtoken';
 import { config } from 'dotenv';
@@ -8,11 +8,11 @@ import IuserSchema from '../interfaces/user';
 
 interface IuserBase extends IuserSchema{
     generateAuthToken(): Promise<string>
-}
+};
 
 interface IuserModel extends Model<IuserBase>{
     verifyToken(token: string): Promise<string>
-}
+};
 
 
 const userSchema:Schema = new Schema({
@@ -46,8 +46,7 @@ const userSchema:Schema = new Schema({
         default:false
     },
     'isAdmin': {
-        default:false,
-        type: Number
+        default:false
     },
     'tokens':[ 
         {

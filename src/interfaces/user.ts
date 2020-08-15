@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
-interface IuserSchema extends Document {
+interface IuserSchema extends Document{
     _id: Types.ObjectId,
     name: string,
     email: string,
